@@ -3,16 +3,18 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
+const yenv = require("yenv");
+const env = yenv("app.yaml", { env: "env_variables" });
+const PORT = env["AA"];
 const { initialDb } = require("./db/db.connect");
 const videos = require("./routes/videos.routes");
 const users = require("./routes/users.routes");
 const playlists = require("./routes/playlists.routes");
 const prefrences = require("./routes/prefrences.routes");
-const PORT = 8000;
 app.use(bodyParser.json());
 app.use(cors());
 
-// initialDb();
+initialDb();
 
 app.use("/videos", videos);
 app.use("/users", users);
