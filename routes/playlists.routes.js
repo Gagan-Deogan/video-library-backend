@@ -1,17 +1,33 @@
 const express = require("express");
 const router = express.Router();
+const { authenticate } = require("../config/passport");
 
-const { getPlaylistById, getVideoById, getUserById } = require("../controllers/params.controller")
-const { playlistVideoToogle, updatePlaylist, createPlaylist,getPlaylists, deletePlaylist } = require("../controllers/playlist.controller")
-const { getPlaylistVideoToogleAction, extractingPlaylistsVideos } = require("../controllers/middlewares")
+const {
+  getPlaylistById,
+  getVideoById,
+  getUserById,
+} = require("../controllers/params.controller");
+const {
+  playlistVideoToogle,
+  updatePlaylist,
+  createPlaylist,
+  getPlaylists,
+  deletePlaylist,
+  addNotes,
+} = require("../controllers/playlist.controller");
+const {
+  getPlaylistVideoToogleAction,
+  getUserNotesPlaylist,
+} = require("../controllers/middlewares");
 
-router.param("userId", getUserById )
-router.get("/:userId", getPlaylists ,extractingPlaylistsVideos)
-router.param("playlistId", getPlaylistById )
-router.param("videoId", getVideoById )
-router.post("/create/:userId", createPlaylist, extractingPlaylistsVideos )
-router.post("/:userId/:playlistId/:videoId",getPlaylistVideoToogleAction, playlistVideoToogle, extractingPlaylistsVideos)
-router.put("/:userId/:playlistId", updatePlaylist )
-router.delete("/:userId/:playlistId", deletePlaylist )
+router.use(authenticate);
+router.get("/", getPlaylists);
+router.param("videoId", getVideoById);
+router.param("playlistId", getPlaylistById);
+router.post("/create", createPlaylist);
+router.post("/add-note/:videoId", getUserNotesPlaylist, addNotes);
+router.post("/:playlistId/:videoId", playlistVideoToogle);
+router.put("/:playlistId", updatePlaylist);
+router.delete("/:playlistId", deletePlaylist);
 
-module.exports = router
+module.exports = router;

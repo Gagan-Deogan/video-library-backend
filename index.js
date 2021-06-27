@@ -5,38 +5,34 @@ const cors = require("cors");
 const app = express();
 const yenv = require("yenv");
 const env = yenv("app.yaml", { env: "env_variables" });
-const PORT = env["AA"];
-const { initialDb } = require("./db/db.connect");
+const { initialDb } = require("./config/db.connect");
 const videos = require("./routes/videos.routes");
 const users = require("./routes/users.routes");
 const playlists = require("./routes/playlists.routes");
-const prefrences = require("./routes/prefrences.routes");
 app.use(bodyParser.json());
 app.use(cors());
 
 initialDb();
 
+const PORT = 8080;
+
 app.use("/videos", videos);
 app.use("/users", users);
 app.use("/playlists", playlists);
-app.use("/prefrences", prefrences);
 app.get("/", (req, res) => {
   res.send("server is working");
 });
 
 app.use((req, res) => {
   res.status(404).json({
-    success: false,
     message: "route not found on server, please check",
   });
 });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: "error occured, see the errMessage key for more details",
-    errorMessage: err.message,
+  res.status(503).json({
+    error: err.message,
   });
 });
 
