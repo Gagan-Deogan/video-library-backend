@@ -16,22 +16,6 @@ const UserSchema = new Schema({
     type: String,
     required: "password Required",
   },
-  // image: {
-  //   type: String,
-  // },
-  // playlists: [playlist],
-  // savelist: {
-  //   type: Schema.ObjectId,
-  //   ref: "save",
-  //   unique: "save list must be unique.",
-  //   required: "savelist list Required",
-  // },
-  // prefrence: {
-  //   type: Schema.ObjectId,
-  //   ref: "prefrence",
-  //   unique: "prefrence list must be unique.",
-  //   required: "prefrence list Required",
-  // },
 });
 
 const User = mongoose.model("User", UserSchema);
