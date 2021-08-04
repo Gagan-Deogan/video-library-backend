@@ -22,7 +22,7 @@ const userLogin = async (req, res) => {
         });
       }
     }
-    return res.status(422).json({ data: "Invalid Email/Password" });
+    return res.status(422).json({ error: "Invalid Email/Password" });
   } catch (err) {
     res.status(503).json({ error: "something went wrong" });
   }
@@ -31,11 +31,10 @@ const userLogin = async (req, res) => {
 const newUser = async (req, res) => {
   try {
     let user = req.body;
-    console.log(user);
     user.email = user.email.toLowerCase();
     const isAlreadyExists = await User.findOne({ email: user.email });
     if (isAlreadyExists) {
-      res.status(422).json({ data: "User Already Exists" });
+      res.status(422).json({ error: "User Already Exists" });
     } else {
       user.password = await generateHash(user.password);
       const NewUser = new User(user);
@@ -45,7 +44,6 @@ const newUser = async (req, res) => {
       res.status(201).json({ data: "Sign up Successfully" });
     }
   } catch (err) {
-    console.log(err.message);
     res.status(503).json({ error: "something went wrong" });
   }
 };
@@ -81,7 +79,7 @@ const chnagePassword = async (req, res) => {
       const updatedUser = await user.save();
       res.status(200).json({ data: "Successfull Update" });
     } else {
-      res.status(422).json({ data: "Old password isn't valid" });
+      res.status(422).json({ error: "Old password isn't valid" });
     }
   } catch (err) {
     res.status(503).json({ error: "something went wrong" });
