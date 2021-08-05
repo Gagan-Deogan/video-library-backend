@@ -8,7 +8,6 @@ const extractingPlaylistsVideosData = (playlists) => {
       })),
     };
   });
-  console.log(playlistsData);
   return playlistsData;
 };
 

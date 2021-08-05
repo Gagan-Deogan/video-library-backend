@@ -18,7 +18,6 @@ const getPlaylists = async (req, res) => {
     const extaractedData = extractingPlaylistsVideosData(playlists);
     res.status(200).json({ data: extaractedData });
   } catch (err) {
-    console.log(err);
     res.status(503).json({ error: "Something went worng" });
   }
 };
@@ -32,9 +31,8 @@ const createPlaylist = async (req, res, next) => {
     }
     let newPlaylist = new Playlist({ userId: user._id, name });
     newPlaylist = await newPlaylist.save();
-    res.status(200).json({ data: newPlaylist });
+    res.status(201).json({ data: newPlaylist, message: "Playlist Created" });
   } catch (err) {
-    console.log(err);
     res.status(503).json({ error: "Something went worng" });
   }
 };
@@ -102,7 +100,6 @@ const addNotes = async (req, res) => {
         { _id: videoDetials._id, notes: [{ text, time }] },
       ]);
       message = "video Added Successfully";
-      console.log(playlist.videos[0]);
     }
     const updatedPlaylist = await playlist.save();
     const updatedNote = updatedPlaylist.videos
